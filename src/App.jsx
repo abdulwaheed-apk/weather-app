@@ -46,7 +46,7 @@ export function SearchCity({ city, setCity }) {
   )
 }
 function FindCity({ city }) {
-  const { data, isError, isSuccess } = useQuery("name", async () => {
+  const { data, isError, isSuccess } = useQuery(`${city}`, async () => {
     const res = await fetch(
       `https://api.openweathermap.org/data/2.5/weather?q= ${city} &appid=01a7e742c57c988c7be20dd468b9d579`
     )
