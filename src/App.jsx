@@ -4,7 +4,7 @@ import { useQuery, QueryClient, QueryClientProvider } from "react-query"
 const queryClient = new QueryClient()
 
 export default function App() {
-  const [city, setCity] = useState("London")
+  const [city, setCity] = useState("")
   return (
     <QueryClientProvider client={queryClient}>
       <div className="container">
@@ -16,10 +16,13 @@ export default function App() {
 }
 
 export function SearchCity({ city, setCity }) {
+  function changeValue(e) {
+    setCity(e.target.value)
+  }
   function handleSubmit(e) {
     e.preventDefault()
-
-    // setCity(city)
+    changeValue()
+    setCity("")
   }
   return (
     <>
@@ -33,7 +36,7 @@ export function SearchCity({ city, setCity }) {
             type="search"
             className="form-control"
             value={city}
-            onChange={(e) => setCity(e.target.value)}
+            onChange={changeValue}
             name="search-city"
             placeholder="Karachi"
           />
@@ -68,10 +71,31 @@ function FindCity({ city }) {
       <div>
         {isSuccess && (
           <div className="container border bg-dark p-4 rounded text-white">
-            <p>abc</p>
-            <p>{`Weather of ${data.name}`}</p>
-            <p>{`Temprature: ${Math.round(data.main.temp - 273)} °C `}</p>
-            <p>{`Humidity: ${data.main.humidity}`}</p>
+            <p>
+              {city !== ""
+                ? ` Weather of ${data.name}`
+                : "Enter city name to check weather"}
+            </p>
+            {data.main && (
+              <div>
+                {isSuccess && (
+                  <div className="container border bg-dark p-4 rounded text-white">
+                    {data.main && (
+                      <div>
+                        {" "}
+                        <p>{`Temprature: ${Math.round(
+                          data.main.temp - 273
+                        )} °C `}</p>
+                        <p>{`Humidity: ${data.main.humidity}`}</p>
+                        <p>{`Feels Like:  ${Math.round(
+                          data.main["feels_like"] - 273
+                        )} °C`}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>
